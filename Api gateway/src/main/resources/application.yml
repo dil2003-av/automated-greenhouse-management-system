@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+
+        - id: zone-service
+          uri: lb://ZONE-SERVICE
+          predicates:
+            - Path=/api/zones/**
+
+        - id: crop-service
+          uri: lb://CROP-SERVICE
+          predicates:
+            - Path=/api/crops/**
+
+        - id: automation-service
+          uri: lb://AUTOMATION-SERVICE
+          predicates:
+            - Path=/api/automation/**

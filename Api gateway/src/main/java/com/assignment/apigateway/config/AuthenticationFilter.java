@@ -1,4 +1,4 @@
-package lk.ijse.gdse72.apigateway.config;
+package com.assignment.apigateway.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;

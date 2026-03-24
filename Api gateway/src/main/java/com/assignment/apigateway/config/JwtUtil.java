@@ -1,4 +1,4 @@
-package lk.ijse.gdse72.apigateway.config;
+package com.assignment.apigateway.config;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

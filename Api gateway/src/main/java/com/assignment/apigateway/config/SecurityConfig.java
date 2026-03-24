@@ -1,4 +1,4 @@
-package lk.ijse.gdse72.apigateway.config;
+package com.assignment.apigateway.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

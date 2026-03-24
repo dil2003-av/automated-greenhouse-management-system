@@ -9,5 +9,5 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/dil2003-av/my-config-repo
+          uri: https://github.com/dil2003-av/my-config-repo.git
           default-label: main

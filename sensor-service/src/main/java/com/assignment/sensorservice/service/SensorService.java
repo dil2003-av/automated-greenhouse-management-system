@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
@@ -24,12 +25,25 @@ public class SensorService {
 
     private String deviceId; // dynamically stored
     private String token;    // JWT token
+    private final AtomicReference<TelemetryResponse> lastKnownTelemetry = new AtomicReference<>();
 
     // --- Get latest telemetry ---
     public Mono<TelemetryResponse> getLatest() {
         return ensureAuthenticated()
                 .flatMap(t -> ensureDeviceId())
-                .flatMap(id -> externalIoTClient.getTelemetry(id, token));
+                .flatMap(id -> externalIoTClient.getTelemetry(id, token))
+                .doOnNext(lastKnownTelemetry::set);
+    }
+
+    // Graceful path for scheduler/controller to avoid propagating upstream timeouts as 500 errors.
+    public Mono<TelemetryResponse> getLatestSafe() {
+        return getLatest()
+                .onErrorResume(err -> Mono.empty());
+    }
+
+    public Mono<TelemetryResponse> getLatestWithFallback() {
+        return getLatestSafe()
+                .switchIfEmpty(Mono.defer(() -> Mono.justOrEmpty(lastKnownTelemetry.get())));
     }
 
     // --- Push telemetry to Automation Service (placeholder) ---

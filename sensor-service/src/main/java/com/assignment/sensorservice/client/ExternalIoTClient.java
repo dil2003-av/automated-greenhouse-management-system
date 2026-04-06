@@ -3,10 +3,14 @@ package com.assignment.sensorservice.client;
 import com.assignment.sensorservice.dto.TelemetryResponse;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
 
+import io.netty.channel.ChannelOption;
+import java.time.Duration;
 import java.util.List;
 
 @Component
@@ -15,7 +19,14 @@ public class ExternalIoTClient {
     private final WebClient webClient;
 
     public ExternalIoTClient(@Value("${external-iot.base-url}") String baseUrl) {
-        this.webClient = WebClient.builder().baseUrl(baseUrl).build();
+        HttpClient httpClient = HttpClient.create()
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
+                .responseTimeout(Duration.ofSeconds(8));
+
+        this.webClient = WebClient.builder()
+                .baseUrl(baseUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
     }
 
     // --- Authentication ---

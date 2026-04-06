@@ -20,7 +20,7 @@ public class SensorService {
     @Value("${external-iot.username}")
     private String username;
 
-    @Value("${external-iot.password}6")
+    @Value("${external-iot.password}")
     private String password;
 
     private String deviceId; // dynamically stored

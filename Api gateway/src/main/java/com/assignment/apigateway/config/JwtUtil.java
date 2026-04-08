@@ -9,7 +9,7 @@ import java.security.Key;
 
 @Component
 public class JwtUtil {
-    public static final String SECRET = "MyCustomSecretKeyForAGMSProject12345678901234567890";
+    public static final String SECRET = "2a049c7b26086293f8582293818e50c78c976f0a3be4816c2d2915915892615c";
 
     public void validateToken(final String token) {
         Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
